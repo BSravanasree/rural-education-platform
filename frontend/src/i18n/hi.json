@@ -1,0 +1,112 @@
+{
+  "appTitle": "ग्रामीण शिक्षा मंच",
+  "appTagline": "ग्रामीण छात्रों को सुलभ एवं गुणवत्तापूर्ण शिक्षा प्रदान करना",
+  "nav": {
+    "home": "मुख्य पृष्ठ",
+    "courses": "पाठ्यक्रम देखें",
+    "about": "हमारे बारे में",
+    "contact": "संपर्क करें",
+    "login": "लॉग इन",
+    "register": "छात्र पंजीकरण",
+    "dashboard": "डैशबोर्ड",
+    "logout": "लॉग आउट"
+  },
+  "lowBandwidth": {
+    "toggleLabel": "कम बैंडविड्थ मोड",
+    "activeBadge": "कम इंटरनेट के लिए अनुकूलित",
+    "videoNotice": "डेटा की बचत के लिए ऑटो-प्ले अक्षम है।"
+  },
+  "roles": {
+    "student": "छात्र",
+    "teacher": "शिक्षक",
+    "admin": "प्रशासक"
+  },
+  "auth": {
+    "loginTitle": "स्वागत है",
+    "registerTitle": "छात्र पंजीकरण करें",
+    "emailLabel": "ईमेल पता",
+    "passwordLabel": "पासवर्ड",
+    "fullNameLabel": "पूरा नाम",
+    "phoneLabel": "फोन नंबर",
+    "gradeLevelLabel": "कक्षा",
+    "schoolNameLabel": "विद्यालय का नाम",
+    "villageDistrictLabel": "गांव / जिला",
+    "loginBtn": "साइन इन करें",
+    "registerBtn": "छात्र खाता बनाएं",
+    "noAccount": "खाता नहीं है?",
+    "haveAccount": "पहले से पंजीकृत हैं?"
+  },
+  "student": {
+    "welcome": "स्वागत है,",
+    "enrolledCourses": "नामांकित पाठ्यक्रम",
+    "overallProgress": "कुल प्रगति",
+    "quizzesAttempted": "पूर्ण की गई क्विज़",
+    "assignmentsSubmitted": "जमा किए गए असाइनमेंट",
+    "recentScores": "हाल के क्विज़ अंक",
+    "pendingAssignments": "लंबित असाइनमेंट",
+    "continueLearning": "पढ़ाई जारी रखें",
+    "viewDetails": "पाठ्यक्रम देखें"
+  },
+  "teacher": {
+    "dashboard": "शिक्षक डैशबोर्ड",
+    "totalCourses": "कुल पाठ्यक्रम",
+    "totalStudents": "नामांकित छात्र",
+    "pendingSubmissions": "जांचने हेतु लंबित असाइनमेंट",
+    "createCourse": "नया पाठ्यक्रम बनाएं",
+    "manageContent": "सामग्री प्रबंधन",
+    "gradeAssignments": "अंक प्रदान करें"
+  },
+  "admin": {
+    "dashboard": "प्रशासनिक डैशबोर्ड",
+    "totalUsers": "कुल उपयोगकर्ता",
+    "totalStudents": "छात्रों की संख्या",
+    "totalTeachers": "शिक्षकों की संख्या",
+    "totalCourses": "कुल पाठ्यक्रम",
+    "createTeacher": "नया शिक्षक जोड़ें",
+    "userManagement": "उपयोगकर्ता प्रबंधन",
+    "active": "सक्रिय",
+    "deactivated": "निष्क्रिय"
+  },
+  "quiz": {
+    "title": "क्विज़ परीक्षा",
+    "submitBtn": "उत्तर जमा करें",
+    "scoreResult": "परीक्षा परिणाम",
+    "yourScore": "आपका स्कोर",
+    "correctAnswers": "सही उत्तर"
+  },
+  "assignment": {
+    "title": "असाइनमेंट",
+    "instructions": "निर्देश",
+    "submitBtn": "असाइनमेंट जमा करें",
+    "submissionText": "लिखित उत्तर",
+    "fileUpload": "फ़ाइल अपलोड करें",
+    "graded": "मूल्यांकन पूर्ण",
+    "feedback": "शिक्षक की टिप्पणी",
+    "marksObtained": "प्राप्त अंक"
+  },
+  "landing": {
+    "heroBadge": "कम बैंडविड्थ अनुकूलित ग्रामीण शिक्षा मंच",
+    "heroTitle": "डिजिटल शिक्षा द्वारा ग्रामीण शिक्षा की खाई को पाटना",
+    "heroDescription": "ग्रामीण छात्रों के लिए उच्च गुणवत्ता वाले पाठ्यक्रम, डाउनलोड करने योग्य PDF नोट्स, क्विज़ और कम डेटा वाले वीडियो लेक्चर।",
+    "getStarted": "मुफ्त शुरू करें",
+    "exploreCatalog": "पाठ्यक्रम देखें",
+    "feature1Title": "कम डेटा उपयोग",
+    "feature1Desc": "2G/3G नेटवर्क पर भी बिना किसी रुकावट के आसानी से चलने के लिए डिज़ाइन किया गया।",
+    "feature2Title": "बहुभाषी सहायता",
+    "feature2Desc": "अपनी मातृभाषा में सीखें - अंग्रेजी, तमिल, तेलुगु और हिंदी में उपलब्ध।",
+    "feature3Title": "योग्य शिक्षक",
+    "feature3Desc": "विशेषज्ञ शिक्षक पाठ्यक्रम तैयार करते हैं और छात्रों का मार्गदर्शन करते हैं।",
+    "feature4Title": "तत्काल अंक मूल्यांकन",
+    "feature4Desc": "वस्तुनिष्ठ क्विज़ पूरा करें और तुरंत अपना स्कोर एवं प्रगति देखें।",
+    "featuredTitle": "प्रमुख पाठ्यक्रम",
+    "featuredDesc": "गणित, विज्ञान, डिजिटल साक्षरता और व्यावसायिक कौशल सीखें।"
+  },
+  "courseCard": {
+    "enrollNow": "अभी नामांकित हों",
+    "viewCourse": "पाठ्यक्रम देखें",
+    "lowBandwidth": "कम इंटरनेट",
+    "beginner": "प्रारंभिक",
+    "intermediate": "मध्यम",
+    "advanced": "उच्च स्तर"
+  }
+}

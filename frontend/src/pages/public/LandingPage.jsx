@@ -1,0 +1,578 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axiosClient from '../../api/axiosClient';
+import CourseCard from '../../components/CourseCard';
+import { useLanguage } from '../../context/LanguageContext';
+import { 
+  BookOpen, WifiOff, Globe, Award, CheckCircle, Users, GraduationCap, ArrowRight,
+  Sparkles, RotateCw, ChevronLeft, ChevronRight, CheckCircle2, Search, ShieldCheck,
+  Heart, AlertCircle, Printer, Sprout, Cpu, Atom, MessageSquare
+} from 'lucide-react';
+
+const FLASHCARD_DECKS = [
+  {
+    id: 'agri',
+    title: 'Agriculture & Crop Science',
+    icon: <Sprout color="#059669" size={24} />,
+    cards: [
+      {
+        id: 1,
+        termEn: 'Photosynthesis',
+        termTe: 'కిరణజన్య సంయోగక్రియ',
+        termHi: 'प्रकाश संश्लेषण',
+        defEn: 'Process by which green plants use sunlight to synthesize nutrients from carbon dioxide and water.',
+        defTe: 'సూర్యకాంతి, నీరు మరియు బొగ్గుపులుసు వాయువును ఉపయోగించి మొక్కలు ఆహారాన్ని తయారుచేసే ప్రక్రియ.',
+        defHi: 'वह प्रक्रिया जिसके द्वारा हरे पौधे सूर्य के प्रकाश का उपयोग करके अपना भोजन बनाते हैं।',
+        exampleEn: 'Leaves turn green due to chlorophyll which drives photosynthesis.'
+      },
+      {
+        id: 2,
+        termEn: 'Drip Irrigation',
+        termTe: 'బిందు సేద్యం',
+        termHi: 'टपक सिंचाई (ड्रिप सिंचाई)',
+        defEn: 'Water-saving irrigation technique that drips water slowly directly to the roots of plants.',
+        defTe: 'మొక్కల వేర్లకు నేరుగా బొట్లు బొట్లుగా నీటిని అందించే నీటి పొదుపు సేద్య పద్ధతి.',
+        defHi: 'पौधों की जड़ों तक धीरे-धीरे पानी पहुँचाने वाली पानी की बचत करने वाली सिंचाई तकनीक।',
+        exampleEn: 'Saves up to 60% of agricultural water in dry rural areas.'
+      },
+      {
+        id: 3,
+        termEn: 'Organic Farming',
+        termTe: 'సేంద్రీయ వ్యవసాయం',
+        termHi: 'जैविक खेती',
+        defEn: 'Farming without synthetic chemicals or pesticides, using natural compost and neem manure.',
+        defTe: 'రసాయనాలు మరియు క్రిమిసంహారకాలు లేకుండా సహజ ఎరువులతో చేసే వ్యవసాయం.',
+        defHi: 'रसायन और कीटनाशकों के बिना प्राकृतिक खाद से की जाने वाली खेती।',
+        exampleEn: 'Improves long-term soil fertility and health.'
+      }
+    ]
+  },
+  {
+    id: 'comp',
+    title: 'Digital Literacy & Computers',
+    icon: <Cpu color="#2563eb" size={24} />,
+    cards: [
+      {
+        id: 4,
+        termEn: 'CPU (Central Processing Unit)',
+        termTe: 'సిపియు (కంప్యూటర్ మెదడు)',
+        termHi: 'सीपीयू (कंप्यूटर का मस्तिष्क)',
+        defEn: 'The primary component that executes instructions and processes data in a computer.',
+        defTe: 'కంప్యూటర్ యొక్క అన్ని గణనలు మరియు డేటాను విశ్లేషించే ప్రధాన భాగం.',
+        defHi: 'कंप्यूटर का मुख्य भाग जो सभी निर्देशों को निष्पादित करता है।',
+        exampleEn: 'Known as the brain of the computer.'
+      },
+      {
+        id: 5,
+        termEn: 'Web Browser',
+        termTe: 'వెబ్ బ్రౌజర్ (Google Chrome / Edge)',
+        termHi: 'वेब ब्राउजर',
+        defEn: 'Software application used to access and view websites on the Internet.',
+        defTe: 'ఇంటర్నెట్‌లో వెబ్‌సైట్‌లను చూడటానికి ఉపయోగించే సాఫ్ట్‌వేర్ యాప్.',
+        defHi: 'इंटरनेट पर वेबसाइटों को देखने के लिए इस्तेमाल किया जाने वाला सॉफ्टवेयर।',
+        exampleEn: 'Examples: Google Chrome, Mozilla Firefox, Microsoft Edge.'
+      }
+    ]
+  },
+  {
+    id: 'science',
+    title: 'Class 10 Science & Physics',
+    icon: <Atom color="#9333ea" size={24} />,
+    cards: [
+      {
+        id: 6,
+        termEn: 'Newton’s First Law of Motion',
+        termTe: 'న్యూటన్ మొదటి గమన నియమం (జడత్వ నియమం)',
+        termHi: 'न्यूटन का गति का पहला नियम (जड़त्व नियम)',
+        defEn: 'An object remains at rest or in uniform motion unless acted upon by an external force.',
+        defTe: 'బాహ్య బలం పనిచేయనంత వరకు ప్రతి వస్తువు తన స్థిరత్వాన్ని లేదా సమగమనాన్ని కొనసాగిస్తుంది.',
+        defHi: 'कोई वस्तु तब तक अपनी स्थिति नहीं बदलती जब तक उस पर कोई बाहरी बल न लगाया जाए।',
+        exampleEn: 'Why passengers jerk forward when a bus suddenly stops.'
+      }
+    ]
+  },
+  {
+    id: 'english',
+    title: 'Spoken English & Vocabulary',
+    icon: <MessageSquare color="#ea580c" size={24} />,
+    cards: [
+      {
+        id: 7,
+        termEn: 'Perseverance',
+        termTe: 'పట్టుదల / శ్రమించటం',
+        termHi: 'दृढ़ता / निरंतर प्रयास',
+        defEn: 'Continued effort to achieve something despite difficulties or delays.',
+        defTe: 'కష్టాలు ఎదురైనా లక్ష్యాన్ని సాధించే వరకు పట్టుదలతో ప్రయత్నించడం.',
+        defHi: 'कठिनाइयों के बावजूद लक्ष्य हासिल करने का लगातार प्रयास।',
+        exampleEn: 'With perseverance, rural students can achieve high ranks in national exams.'
+      }
+    ]
+  }
+];
+
+const LandingPage = () => {
+  const { t } = useLanguage();
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Flashcard State
+  const [selectedDeckId, setSelectedDeckId] = useState('agri');
+  const [cardLang, setCardLang] = useState('te');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [masteredCards, setMasteredCards] = useState({});
+
+  // Parent Portal State
+  const [parentQuery, setParentQuery] = useState('');
+  const [parentReport, setParentReport] = useState(null);
+  const [parentLoading, setParentLoading] = useState(false);
+  const [parentError, setParentError] = useState('');
+  const [parentLang, setParentLang] = useState('te');
+
+  useEffect(() => {
+    axiosClient.get('/public/courses')
+      .then(res => setCourses(res.data.slice(0, 3)))
+      .catch(() => setCourses([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const currentDeck = FLASHCARD_DECKS.find(d => d.id === selectedDeckId) || FLASHCARD_DECKS[0];
+  const currentCard = currentDeck.cards[currentIndex];
+
+  const handleNextCard = () => {
+    setIsFlipped(false);
+    setCurrentIndex((prev) => (prev + 1) % currentDeck.cards.length);
+  };
+
+  const handlePrevCard = () => {
+    setIsFlipped(false);
+    setCurrentIndex((prev) => (prev - 1 + currentDeck.cards.length) % currentDeck.cards.length);
+  };
+
+  const getTerm = () => {
+    if (cardLang === 'te') return currentCard.termTe;
+    if (cardLang === 'hi') return currentCard.termHi;
+    return currentCard.termEn;
+  };
+
+  const getDef = () => {
+    if (cardLang === 'te') return currentCard.defTe;
+    if (cardLang === 'hi') return currentCard.defHi;
+    return currentCard.defEn;
+  };
+
+  const handleParentSearch = async (e) => {
+    if (e) e.preventDefault();
+    if (!parentQuery.trim()) return;
+
+    setParentError('');
+    setParentLoading(true);
+    setParentReport(null);
+
+    try {
+      const res = await axiosClient.get(`/public/parent/student-report?query=${encodeURIComponent(parentQuery.trim())}`);
+      setParentReport(res.data);
+    } catch (err) {
+      setParentError(err.response?.data?.message || 'No student found. Try searching for "student@ruraledu.org"');
+    } finally {
+      setParentLoading(false);
+    }
+  };
+
+  return (
+    <div className="landing-page">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <div className="hero-badge">
+            <WifiOff size={16} /> {t('landing.heroBadge')}
+          </div>
+          <h1 className="hero-title">
+            {t('landing.heroTitle')}
+          </h1>
+          <p className="hero-description">
+            {t('landing.heroDescription')}
+          </p>
+          <div className="hero-cta">
+            <Link to="/register" className="btn-primary-lg">
+              {t('landing.getStarted')} <ArrowRight size={18} />
+            </Link>
+            <Link to="/courses" className="btn-outline-lg">
+              {t('landing.exploreCatalog')}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Highlights Grid */}
+      <section className="features-grid">
+        <div className="feature-card">
+          <div className="feature-icon"><WifiOff size={28} /></div>
+          <h3>{t('landing.feature1Title')}</h3>
+          <p>{t('landing.feature1Desc')}</p>
+        </div>
+
+        <div className="feature-card">
+          <div className="feature-icon"><Globe size={28} /></div>
+          <h3>{t('landing.feature2Title')}</h3>
+          <p>{t('landing.feature2Desc')}</p>
+        </div>
+
+        <div className="feature-card">
+          <div className="feature-icon"><GraduationCap size={28} /></div>
+          <h3>{t('landing.feature3Title')}</h3>
+          <p>{t('landing.feature3Desc')}</p>
+        </div>
+
+        <div className="feature-card">
+          <div className="feature-icon"><Award size={28} /></div>
+          <h3>{t('landing.feature4Title')}</h3>
+          <p>{t('landing.feature4Desc')}</p>
+        </div>
+      </section>
+
+      {/* 🎴 SECTION 1: Interactive Multilingual Flashcards */}
+      <section className="section-featured-courses" style={{ background: '#f8fafc', padding: '3.5rem 1.5rem', borderRadius: '24px', margin: '2rem 0' }}>
+        <div className="section-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <span className="badge badge-green margin-bottom-xs" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Sparkles size={14} /> Interactive Study Aid
+          </span>
+          <h2 style={{ fontSize: '2.2rem', fontFamily: 'var(--font-heading)', color: '#0f172a' }}>
+            🎴 Interactive Multilingual Flashcards
+          </h2>
+          <p style={{ color: '#64748b', fontSize: '1rem', maxWidth: '650px', margin: '0 auto' }}>
+            Practice key concepts in Agriculture, Science, Computers, and Spoken English in Telugu, Hindi, and English!
+          </p>
+        </div>
+
+        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+          {/* Deck Selectors & Language Toggle */}
+          <div style={{
+            display: 'flex',
+            justify: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            marginBottom: '1.5rem',
+            background: '#ffffff',
+            padding: '1rem 1.25rem',
+            borderRadius: '16px',
+            border: '1px solid #a7f3d0',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+          }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {FLASHCARD_DECKS.map(deck => (
+                <button
+                  key={deck.id}
+                  onClick={() => { setSelectedDeckId(deck.id); setCurrentIndex(0); setIsFlipped(false); }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 14px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '0.88rem',
+                    background: selectedDeckId === deck.id ? '#059669' : '#f1f5f9',
+                    color: selectedDeckId === deck.id ? '#ffffff' : '#334155',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {deck.icon} {deck.title}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '4px', borderRadius: '8px' }}>
+              <button
+                onClick={() => setCardLang('te')}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '700',
+                  fontSize: '0.85rem',
+                  background: cardLang === 'te' ? '#059669' : 'transparent',
+                  color: cardLang === 'te' ? '#ffffff' : '#64748b'
+                }}
+              >
+                తెలుగు
+              </button>
+              <button
+                onClick={() => setCardLang('hi')}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '700',
+                  fontSize: '0.85rem',
+                  background: cardLang === 'hi' ? '#059669' : 'transparent',
+                  color: cardLang === 'hi' ? '#ffffff' : '#64748b'
+                }}
+              >
+                हिंदी
+              </button>
+              <button
+                onClick={() => setCardLang('en')}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '700',
+                  fontSize: '0.85rem',
+                  background: cardLang === 'en' ? '#059669' : 'transparent',
+                  color: cardLang === 'en' ? '#ffffff' : '#64748b'
+                }}
+              >
+                English
+              </button>
+            </div>
+          </div>
+
+          {/* Interactive Card */}
+          <div 
+            onClick={() => setIsFlipped(!isFlipped)}
+            style={{
+              cursor: 'pointer',
+              marginBottom: '1.5rem'
+            }}
+          >
+            <div style={{
+              minHeight: '300px',
+              background: isFlipped ? '#f0fdf4' : '#ffffff',
+              borderRadius: '24px',
+              padding: '2.5rem 2rem',
+              border: isFlipped ? '3px solid #059669' : '2px solid #e2e8f0',
+              boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              justify: 'space-between',
+              alignItems: 'center',
+              textAlign: 'center',
+              position: 'relative',
+              transition: 'all 0.3s'
+            }}>
+              <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#059669', fontWeight: '600', background: 'rgba(16, 185, 129, 0.1)', padding: '4px 10px', borderRadius: '12px' }}>
+                <RotateCw size={14} /> Click to Flip Card
+              </div>
+
+              <div style={{ width: '100%', margin: 'auto 0' }}>
+                <span style={{ textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.75rem', color: '#64748b', fontWeight: '700', display: 'block', marginBottom: '0.75rem' }}>
+                  {isFlipped ? '💡 Explanation & Meaning (వివరణ)' : '❓ Question / Concept (ప్రశ్న / పదం)'}
+                </span>
+
+                {!isFlipped ? (
+                  <div>
+                    <h2 style={{ fontSize: '2.4rem', color: '#0f172a', fontFamily: 'var(--font-heading)', margin: '0 0 0.5rem 0' }}>
+                      {getTerm()}
+                    </h2>
+                    {cardLang !== 'en' && (
+                      <span style={{ fontSize: '1.1rem', color: '#64748b', fontStyle: 'italic' }}>({currentCard.termEn})</span>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <p style={{ fontSize: '1.3rem', color: '#0f172a', lineHeight: 1.5, fontWeight: '500', marginBottom: '1.25rem' }}>
+                      {getDef()}
+                    </p>
+                    <div style={{ background: '#ffffff', padding: '0.75rem 1.25rem', borderRadius: '12px', border: '1px solid #a7f3d0', display: 'inline-block', textAlign: 'left' }}>
+                      <strong style={{ fontSize: '0.85rem', color: '#059669', display: 'block' }}>📌 Example:</strong>
+                      <span style={{ fontSize: '0.92rem', color: '#334155' }}>"{currentCard.exampleEn}"</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #f1f5f9' }}>
+                <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '600' }}>
+                  Card {currentIndex + 1} of {currentDeck.cards.length}
+                </span>
+                <span style={{ fontSize: '0.85rem', color: '#059669', fontWeight: '600' }}>
+                  Click card to flip 🔄
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button onClick={handlePrevCard} className="btn-secondary" style={{ padding: '0.65rem 1.25rem' }}>
+              <ChevronLeft size={18} /> Previous Card
+            </button>
+            <button onClick={handleNextCard} className="btn-primary" style={{ padding: '0.65rem 1.25rem' }}>
+              Next Card <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 👨‍👩‍👧 SECTION 2: Parent Progress Summary Portal */}
+      <section className="section-featured-courses" style={{ background: '#ffffff', padding: '3.5rem 1.5rem', borderRadius: '24px', border: '2px solid #a7f3d0', margin: '2rem 0' }}>
+        <div className="section-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <span className="badge badge-green margin-bottom-xs" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Users size={14} /> Parent Portal
+          </span>
+          <h2 style={{ fontSize: '2.2rem', fontFamily: 'var(--font-heading)', color: '#0f172a' }}>
+            👨‍👩‍👧 తల్లిదండ్రుల ప్రగతి పోర్టల్ (Parent Portal)
+          </h2>
+          <p style={{ color: '#64748b', fontSize: '1rem', maxWidth: '650px', margin: '0 auto' }}>
+            ఇమెయిల్ లేదా ఐడి ఎంటర్ చేసి మీ పిల్లల చదువు ప్రగతి మరియు పరీక్ష మార్కులను చూడవచ్చు.
+          </p>
+        </div>
+
+        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+          {/* Language Switcher for Parents */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            <button
+              onClick={() => setParentLang('te')}
+              className={`tab-btn ${parentLang === 'te' ? 'active' : ''}`}
+              style={{ padding: '6px 16px', fontSize: '0.85rem' }}
+            >
+              తెలుగు
+            </button>
+            <button
+              onClick={() => setParentLang('hi')}
+              className={`tab-btn ${parentLang === 'hi' ? 'active' : ''}`}
+              style={{ padding: '6px 16px', fontSize: '0.85rem' }}
+            >
+              हिंदी
+            </button>
+            <button
+              onClick={() => setParentLang('en')}
+              className={`tab-btn ${parentLang === 'en' ? 'active' : ''}`}
+              style={{ padding: '6px 16px', fontSize: '0.85rem' }}
+            >
+              English
+            </button>
+          </div>
+
+          <form onSubmit={handleParentSearch} style={{
+            background: '#f8fafc',
+            padding: '1.5rem',
+            borderRadius: '20px',
+            border: '1px solid #e2e8f0',
+            marginBottom: '1.5rem'
+          }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '700', color: '#0f172a', fontSize: '0.95rem' }}>
+              {parentLang === 'te' ? 'విద్యార్థి ఇమెయిల్ (Student Email):' : parentLang === 'hi' ? 'छात्र ईमेल दर्ज करें:' : 'Enter Student Email:'}
+            </label>
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <div className="input-with-icon" style={{ flex: 1, minWidth: '250px' }}>
+                <Search size={18} />
+                <input
+                  type="text"
+                  required
+                  value={parentQuery}
+                  onChange={(e) => setParentQuery(e.target.value)}
+                  placeholder="student@ruraledu.org"
+                />
+              </div>
+              <button type="submit" disabled={parentLoading} className="btn-primary" style={{ padding: '0.75rem 1.5rem' }}>
+                {parentLoading ? 'Searching...' : (parentLang === 'te' ? 'ప్రగతి నివేదిక చూడండి' : parentLang === 'hi' ? 'रिपोर्ट देखें' : 'View Report')}
+              </button>
+            </div>
+
+            <div style={{ marginTop: '0.75rem', fontSize: '0.82rem', color: '#64748b' }}>
+              ⚡ Demo Search: Click 
+              <button 
+                type="button" 
+                onClick={() => { setParentQuery('student@ruraledu.org'); handleParentSearch(); }}
+                style={{ border: 'none', background: 'none', color: '#059669', fontWeight: '700', textDecoration: 'underline', cursor: 'pointer', marginLeft: '4px' }}
+              >
+                student@ruraledu.org
+              </button>
+            </div>
+          </form>
+
+          {parentError && (
+            <div className="auth-error-banner margin-bottom-lg">
+              <AlertCircle size={18} /> {parentError}
+            </div>
+          )}
+
+          {parentReport && (
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              padding: '2rem',
+              border: '2px solid #059669',
+              boxShadow: '0 15px 30px -10px rgba(5, 150, 105, 0.15)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '1rem', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <span className="badge badge-green" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <ShieldCheck size={14} /> Verified Student Report
+                  </span>
+                  <h3 style={{ fontSize: '1.6rem', color: '#0f172a', margin: '0.25rem 0' }}>{parentReport.studentName}</h3>
+                  <span style={{ color: '#64748b', fontSize: '0.88rem' }}>🏫 {parentReport.schoolName} • 🎓 {parentReport.gradeLevel}</span>
+                </div>
+
+                <button onClick={() => window.print()} className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  <Printer size={16} /> Print Report
+                </button>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div style={{ background: '#f0fdf4', padding: '1rem', borderRadius: '14px', textAlign: 'center', border: '1px solid #a7f3d0' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: '700' }}>PROGRESS</span>
+                  <h2 style={{ fontSize: '2rem', color: '#059669', margin: '0.1rem 0' }}>{parentReport.overallProgressPercentage}%</h2>
+                  <span style={{ fontSize: '0.75rem', color: '#047857' }}>Completed</span>
+                </div>
+
+                <div style={{ background: '#fff7ed', padding: '1rem', borderRadius: '14px', textAlign: 'center', border: '1px solid #fed7aa' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#c2410c', fontWeight: '700' }}>STREAK</span>
+                  <h2 style={{ fontSize: '2rem', color: '#ea580c', margin: '0.1rem 0' }}>🔥 {parentReport.streakDays} Days</h2>
+                  <span style={{ fontSize: '0.75rem', color: '#c2410c' }}>Active Learning</span>
+                </div>
+
+                <div style={{ background: '#eff6ff', padding: '1rem', borderRadius: '14px', textAlign: 'center', border: '1px solid #bfdbfe' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#1d4ed8', fontWeight: '700' }}>QUIZ AVERAGE</span>
+                  <h2 style={{ fontSize: '2rem', color: '#2563eb', margin: '0.1rem 0' }}>{parentReport.averageQuizScore} / 10</h2>
+                  <span style={{ fontSize: '0.8rem', color: '#1d4ed8' }}>Passed</span>
+                </div>
+              </div>
+
+              <div style={{ background: '#f8fafc', padding: '1rem 1.25rem', borderRadius: '12px', borderLeft: '4px solid #059669' }}>
+                <strong style={{ color: '#059669', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Heart size={16} /> 
+                  {parentLang === 'te' ? 'తల్లిదండ్రులకు సందేశం:' : parentLang === 'hi' ? 'अभिभावकों के लिए संदेश:' : 'Note for Parents:'}
+                </strong>
+                <p style={{ margin: '0.25rem 0 0 0', color: '#334155', fontSize: '0.9rem' }}>
+                  {parentLang === 'te' 
+                    ? `శ్రీమతి/శ్రీమాన్, మీ అమ్మాయి/అబ్బాయి (${parentReport.studentName}) డిజిటల్ తరగతులలో 100% ఉత్తీర్ణత సాధించి చాలా చక్కగా చదువుతున్నారు.`
+                    : parentLang === 'hi'
+                    ? `आपके बच्चे (${parentReport.studentName}) ने डिजिटल कक्षाओं में 100% प्रगति हासिल की है।`
+                    : `${parentReport.studentName} has achieved 100% progress in their online course lectures and quizzes.`}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Featured Courses Section */}
+      <section className="section-featured-courses">
+        <div className="section-header">
+          <h2>{t('landing.featuredTitle')}</h2>
+          <p>{t('landing.featuredDesc')}</p>
+        </div>
+
+        {loading ? (
+          <div className="loading-spinner">Loading courses...</div>
+        ) : (
+          <div className="courses-grid">
+            {courses.map(course => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+};
+
+export default LandingPage;

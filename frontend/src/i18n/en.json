@@ -1,0 +1,112 @@
+{
+  "appTitle": "Rural Education Platform",
+  "appTagline": "Empowering Rural Students with Accessible, Quality Education",
+  "nav": {
+    "home": "Home",
+    "courses": "Browse Courses",
+    "about": "About Us",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register Student",
+    "dashboard": "Dashboard",
+    "logout": "Logout"
+  },
+  "lowBandwidth": {
+    "toggleLabel": "Low-Bandwidth Mode",
+    "activeBadge": "Low-Bandwidth Optimized",
+    "videoNotice": "Auto-play disabled to save mobile data."
+  },
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "admin": "Administrator"
+  },
+  "auth": {
+    "loginTitle": "Welcome Back to Learning",
+    "registerTitle": "Register as Student",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "fullNameLabel": "Full Name",
+    "phoneLabel": "Phone Number",
+    "gradeLevelLabel": "Grade / Standard",
+    "schoolNameLabel": "School Name",
+    "villageDistrictLabel": "Village / District",
+    "loginBtn": "Sign In",
+    "registerBtn": "Create Student Account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already registered?"
+  },
+  "student": {
+    "welcome": "Welcome back,",
+    "enrolledCourses": "Enrolled Courses",
+    "overallProgress": "Overall Progress",
+    "quizzesAttempted": "Quizzes Attempted",
+    "assignmentsSubmitted": "Assignments Submitted",
+    "recentScores": "Recent Quiz Scores",
+    "pendingAssignments": "Pending Assignments",
+    "continueLearning": "Continue Learning",
+    "viewDetails": "View Course"
+  },
+  "teacher": {
+    "dashboard": "Teacher Dashboard",
+    "totalCourses": "Total Courses Taught",
+    "totalStudents": "Total Students Enrolled",
+    "pendingSubmissions": "Pending Submissions to Grade",
+    "createCourse": "Create New Course",
+    "manageContent": "Manage Course Content",
+    "gradeAssignments": "Grade Submissions"
+  },
+  "admin": {
+    "dashboard": "Admin Operations",
+    "totalUsers": "Total Platform Users",
+    "totalStudents": "Students Count",
+    "totalTeachers": "Teachers Count",
+    "totalCourses": "Total Courses",
+    "createTeacher": "Register New Teacher",
+    "userManagement": "User Management",
+    "active": "Active",
+    "deactivated": "Deactivated"
+  },
+  "quiz": {
+    "title": "Interactive Quiz",
+    "submitBtn": "Submit Answers",
+    "scoreResult": "Quiz Result",
+    "yourScore": "Your Score",
+    "correctAnswers": "Correct Answers"
+  },
+  "assignment": {
+    "title": "Assignment",
+    "instructions": "Instructions",
+    "submitBtn": "Submit Assignment",
+    "submissionText": "Written Answer / Notes",
+    "fileUpload": "Upload PDF / Document",
+    "graded": "Graded",
+    "feedback": "Teacher Feedback",
+    "marksObtained": "Marks Obtained"
+  },
+  "landing": {
+    "heroBadge": "Low-Bandwidth Friendly Rural Learning Platform",
+    "heroTitle": "Bridging the Rural Education Gap with Accessible Digital Learning",
+    "heroDescription": "Providing high-quality courses, downloadable PDF notes, interactive quizzes, and low-data video lectures for students in rural villages and remote schools.",
+    "getStarted": "Get Started Free",
+    "exploreCatalog": "Explore Catalog",
+    "feature1Title": "Low-Bandwidth Optimized",
+    "feature1Desc": "Designed to load seamlessly on 2G/3G connections with zero video autoplay and compressed lesson content.",
+    "feature2Title": "Multilingual Support",
+    "feature2Desc": "Learn in your native language with support for English, Tamil (தமிழ்), Telugu (తెలుగు), and Hindi (हिंदी).",
+    "feature3Title": "Qualified Teachers",
+    "feature3Desc": "Expert educators design structured curricula, grade assignments, and provide individualized feedback.",
+    "feature4Title": "Instant Score Tracking",
+    "feature4Desc": "Complete objective quizzes with instant backend scoring and real-time learning progress monitoring.",
+    "featuredTitle": "Featured Published Courses",
+    "featuredDesc": "Explore basic mathematics, science, digital literacy, and vocational skills."
+  },
+  "courseCard": {
+    "enrollNow": "Enroll Now",
+    "viewCourse": "View Course",
+    "lowBandwidth": "Low-Bandwidth",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  }
+}
