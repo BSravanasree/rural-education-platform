@@ -1,5 +1,25 @@
-frontend/node_modules/
-frontend/dist/
-backend/target/
-*.log
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+**/dist/
+target/
+**/target/
+
+# Environment files & secrets
 .env
+.env.*
+!.env.example
+
+# Local uploads & logs
+uploads/
+**/uploads/
+*.log
+
+# IDE & System files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
