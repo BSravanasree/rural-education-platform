@@ -4,7 +4,6 @@ import com.rural.edu.entity.*;
 import com.rural.edu.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Seed data runner for local development and testing environments only.
- * Disabled in production profile ('prod') to enforce production database security and privacy.
+ * Initializes default system accounts and course data if the database is empty.
+ * Preserves all existing data and never overwrites existing records.
  */
 @Service
-@Profile({"dev", "default"})
 public class DatabaseSeedService implements CommandLineRunner {
 
     @Autowired
@@ -85,6 +83,34 @@ public class DatabaseSeedService implements CommandLineRunner {
             studentRepository.save(new Student(studentUser, "Class 10", "Govt High School Rampur", "Rampur, MP"));
         }
 
-        System.out.println("🌱 Initialized Rural Education Platform Development Seed Data...");
+        if (categoryRepository.count() == 0) {
+            CourseCategory math = categoryRepository.save(new CourseCategory("Mathematics", "Fundamental & advanced math for school students", "calculator"));
+            CourseCategory science = categoryRepository.save(new CourseCategory("Science & Technology", "Physics, Chemistry, Biology & basic computer literacy", "atom"));
+            CourseCategory english = categoryRepository.save(new CourseCategory("English & Communication", "Grammar, spoken English & reading skills", "book-open"));
+            CourseCategory vocational = categoryRepository.save(new CourseCategory("Vocational Skills", "Practical agricultural science & digital tools", "briefcase"));
+
+            Teacher teacher = teacherRepository.findAll().stream().findFirst().orElse(null);
+            Student student = studentRepository.findAll().stream().findFirst().orElse(null);
+
+            if (teacher != null && courseRepository.count() == 0) {
+                Course c1 = courseRepository.save(new Course("Basic Mathematics for Rural High Schools", "Comprehensive guide covering Algebra, Geometry, Arithmetic, and real-world math applications designed for rural students.", math, teacher, "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80"));
+                Course c2 = courseRepository.save(new Course("Introduction to Agriculture & Plant Science", "Learn modern farming techniques, soil health management, crop protection, and sustainable agricultural science.", vocational, teacher, "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=600&q=80"));
+                Course c3 = courseRepository.save(new Course("Digital Literacy & Basic Computers", "Master fundamental computer operations, internet browsing, email communication, and online safety.", science, teacher, "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80"));
+                Course c4 = courseRepository.save(new Course("Class 10 General Science & Physics Foundations", "Explore Laws of Motion, Electricity, Chemical Reactions, and Human Anatomy aligned with Class 10 NCERT curriculum.", science, teacher, "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&q=80"));
+                Course c5 = courseRepository.save(new Course("Spoken English & Communication Skills for Rural Youth", "Develop confidence in everyday English conversation, grammar fundamentals, vocabulary building, and interview preparation.", english, teacher, "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=80"));
+                Course c6 = courseRepository.save(new Course("Financial Literacy & Digital Payments for Rural Communities", "Learn smart budgeting, bank savings accounts, safe UPI digital transactions, micro-loans, and crop insurance schemes.", vocational, teacher, "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=600&q=80"));
+
+                if (student != null) {
+                    enrollmentRepository.save(new Enrollment(student, c1));
+                    enrollmentRepository.save(new Enrollment(student, c2));
+                    enrollmentRepository.save(new Enrollment(student, c3));
+                    enrollmentRepository.save(new Enrollment(student, c4));
+                    enrollmentRepository.save(new Enrollment(student, c5));
+                    enrollmentRepository.save(new Enrollment(student, c6));
+                }
+            }
+        }
+
+        System.out.println("🌱 Initialized Rural Education Platform Default Seed Accounts!");
     }
 }
