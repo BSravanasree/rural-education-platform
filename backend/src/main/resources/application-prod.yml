@@ -7,20 +7,20 @@ spring:
   application:
     name: rural-edu-backend
   datasource:
-    url: ${DATABASE_URL:${MYSQL_URL:jdbc:mysql://${MYSQLHOST:localhost}:${MYSQLPORT:3306}/${MYSQLDATABASE:rural_edu_db}?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true}}
-    username: ${DATABASE_USERNAME:${MYSQLUSER:root}}
-    password: ${DATABASE_PASSWORD:${MYSQLPASSWORD:root}}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL:${MYSQL_URL:jdbc:h2:mem:ruraledudb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}}
+    username: ${DATABASE_USERNAME:${MYSQLUSER:sa}}
+    password: ${DATABASE_PASSWORD:${MYSQLPASSWORD:}}
+    driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
   h2:
     console:
       enabled: false
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: ${DDL_AUTO:update}
     show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
   servlet:
     multipart:
       max-file-size: 50MB
