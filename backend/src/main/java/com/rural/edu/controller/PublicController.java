@@ -121,7 +121,8 @@ public class PublicController {
             databaseSeedService.run();
             return ResponseEntity.ok(Map.of("message", "Database seed executed successfully with videos, study materials, and quizzes!"));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+            e.printStackTrace();
+            return ResponseEntity.ok(Map.of("error", e.toString(), "message", e.getMessage() != null ? e.getMessage() : "Exception during seed"));
         }
     }
 
