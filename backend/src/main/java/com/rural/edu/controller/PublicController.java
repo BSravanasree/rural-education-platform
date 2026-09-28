@@ -112,6 +112,19 @@ public class PublicController {
     @Autowired
     private QuizAttemptRepository quizAttemptRepository;
 
+    @Autowired
+    private com.rural.edu.service.DatabaseSeedService databaseSeedService;
+
+    @GetMapping("/seed")
+    public ResponseEntity<?> triggerSeed() {
+        try {
+            databaseSeedService.run();
+            return ResponseEntity.ok(Map.of("message", "Database seed executed successfully with videos, study materials, and quizzes!"));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/contact")
     public ResponseEntity<?> submitContactForm(@Valid @RequestBody ContactRequest contactRequest) {
         ContactMessage msg = new ContactMessage(
